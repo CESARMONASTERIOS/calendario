@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Calendario Snoopy</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .frase {
+      font-style: italic;
+      color: #7f8c8d;
+      margin-bottom: 20px;
+    }
+
+    .calendario {
+      max-width: 420px;
+      margin: auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border: 2px dashed #dcdde1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .header button {
+      background: #f39c12;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .header button:hover {
+      background: #e67e22;
+    }
+
+    .mes-año {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #34495e;
+    }
+
+    .dias-semana, .dias {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+    }
+
+    .dias-semana div {
+      font-weight: bold;
+      background: #ecf0f1;
+      padding: 5px;
+      border-radius: 4px;
+      color: #2c3e50;
+    }
+
+    .dia {
+      padding: 10px;
+      background: #f9f9f9;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .dia:hover {
+      background: #dcdde1;
+    }
+
+    .link {
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+    }
+
+    .link:hover {
+      background: #2980b9;
+    }
+
+    .blank {
+      background: transparent;
+      cursor: default;
+    }
+
+    .snoopy {
+      margin-top: 20px;
+      width: 150px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Calendario Porque si</h1>
+  <div class="frase">Aunque hoy te sientas pequeñita, recuerda que hasta las estrellas necesitan oscuridad para poder brillar...</div>
+
+  <div class="calendario">
+    <div class="header">
+      <button onclick="cambiarMes(-1)">←</button>
+      <div class="mes-año" id="mesAnio"></div>
+      <button onclick="cambiarMes(1)">→</button>
+    </div>
+
+    <div class="dias-semana">
+      <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+    </div>
+
+    <div class="dias" id="dias"></div>
+  </div>
+
+  <img src="https://upload.wikimedia.org/wikipedia/en/5/53/Snoopy_Peanuts.png" class="snoopy" alt="Snoopy">
+
+  <script>
+    const enlaces = {
+      "2025-05-13": "https://vm.tiktok.com/ZMSegfsnc/",
+    };
+
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+                   "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+    let fechaActual = new Date();
+
+    function renderizarCalendario() {
+      const año = fechaActual.getFullYear();
+      const mes = fechaActual.getMonth();
+      const primerDia = new Date(año, mes, 1).getDay();
+      const totalDias = new Date(año, mes + 1, 0).getDate();
+
+      document.getElementById("mesAnio").textContent = `${meses[mes]} ${año}`;
+
+      const diasDiv = document.getElementById("dias");
+      diasDiv.innerHTML = "";
+
+      for (let i = 0; i < primerDia; i++) {
+        const espacio = document.createElement("div");
+        espacio.className = "dia blank";
+        diasDiv.appendChild(espacio);
+      }
+
+      for (let d = 1; d <= totalDias; d++) {
+        const fechaStr = `${año}-${String(mes + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+        const dia = document.createElement("div");
+        dia.className = "dia";
+        dia.textContent = d;
+
+        if (enlaces[fechaStr]) {
+          dia.classList.add("link");
+          dia.onclick = () => window.open(enlaces[fechaStr], "_blank");
+        }
+        diasDiv.appendChild(dia);
+      }
+    }
+    function cambiarMes(direccion) {
+      fechaActual.setMonth(fechaActual.getMonth() + direccion);
+      renderizarCalendario();
+    }
+    renderizarCalendario();
+  </script>
+</body>
+</html>
